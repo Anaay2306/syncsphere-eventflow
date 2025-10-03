@@ -9,6 +9,12 @@ import Landing from "./pages/Landing";
 import Auth from "./pages/Auth";
 import Dashboard from "./pages/Dashboard";
 import NotFound from "./pages/NotFound";
+import Events from "./pages/Events";
+import Profile from "./pages/Profile";
+import Settings from "./pages/Settings";
+import ManageEvents from "./pages/organizer/ManageEvents";
+import Analytics from "./pages/organizer/Analytics";
+import Speakers from "./pages/organizer/Speakers";
 
 const queryClient = new QueryClient();
 
@@ -55,6 +61,54 @@ const App = () => (
             element={
               <ProtectedRoute>
                 <Dashboard />
+              </ProtectedRoute>
+            } 
+          />
+          <Route 
+            path="/events" 
+            element={
+              <ProtectedRoute>
+                <Events />
+              </ProtectedRoute>
+            } 
+          />
+          <Route 
+            path="/profile" 
+            element={
+              <ProtectedRoute>
+                <Profile />
+              </ProtectedRoute>
+            } 
+          />
+          <Route 
+            path="/settings" 
+            element={
+              <ProtectedRoute>
+                <Settings />
+              </ProtectedRoute>
+            } 
+          />
+          <Route 
+            path="/organizer/events" 
+            element={
+              <ProtectedRoute>
+                <ManageEvents />
+              </ProtectedRoute>
+            } 
+          />
+          <Route 
+            path="/organizer/analytics" 
+            element={
+              <ProtectedRoute>
+                <Analytics />
+              </ProtectedRoute>
+            } 
+          />
+          <Route 
+            path="/organizer/speakers" 
+            element={
+              <ProtectedRoute>
+                <Speakers />
               </ProtectedRoute>
             } 
           />
