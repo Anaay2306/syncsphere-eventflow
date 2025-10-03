@@ -14,7 +14,283 @@ export type Database = {
   }
   public: {
     Tables: {
-      [_ in never]: never
+      events: {
+        Row: {
+          banner_url: string | null
+          created_at: string
+          description: string | null
+          end_date: string
+          id: string
+          location: string | null
+          organizer_id: string | null
+          start_date: string
+          status: string | null
+          title: string
+          updated_at: string
+        }
+        Insert: {
+          banner_url?: string | null
+          created_at?: string
+          description?: string | null
+          end_date: string
+          id?: string
+          location?: string | null
+          organizer_id?: string | null
+          start_date: string
+          status?: string | null
+          title: string
+          updated_at?: string
+        }
+        Update: {
+          banner_url?: string | null
+          created_at?: string
+          description?: string | null
+          end_date?: string
+          id?: string
+          location?: string | null
+          organizer_id?: string | null
+          start_date?: string
+          status?: string | null
+          title?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "events_organizer_id_fkey"
+            columns: ["organizer_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      profiles: {
+        Row: {
+          avatar_url: string | null
+          created_at: string
+          email: string
+          full_name: string | null
+          id: string
+          role: Database["public"]["Enums"]["app_role"]
+          updated_at: string
+        }
+        Insert: {
+          avatar_url?: string | null
+          created_at?: string
+          email: string
+          full_name?: string | null
+          id: string
+          role: Database["public"]["Enums"]["app_role"]
+          updated_at?: string
+        }
+        Update: {
+          avatar_url?: string | null
+          created_at?: string
+          email?: string
+          full_name?: string | null
+          id?: string
+          role?: Database["public"]["Enums"]["app_role"]
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      registrations: {
+        Row: {
+          attendee_id: string | null
+          check_in_time: string | null
+          checked_in: boolean | null
+          created_at: string
+          event_id: string | null
+          id: string
+          points: number | null
+          qr_code: string | null
+        }
+        Insert: {
+          attendee_id?: string | null
+          check_in_time?: string | null
+          checked_in?: boolean | null
+          created_at?: string
+          event_id?: string | null
+          id?: string
+          points?: number | null
+          qr_code?: string | null
+        }
+        Update: {
+          attendee_id?: string | null
+          check_in_time?: string | null
+          checked_in?: boolean | null
+          created_at?: string
+          event_id?: string | null
+          id?: string
+          points?: number | null
+          qr_code?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "registrations_attendee_id_fkey"
+            columns: ["attendee_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "registrations_event_id_fkey"
+            columns: ["event_id"]
+            isOneToOne: false
+            referencedRelation: "events"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      sessions: {
+        Row: {
+          created_at: string
+          description: string | null
+          end_time: string
+          event_id: string | null
+          id: string
+          location: string | null
+          max_capacity: number | null
+          speaker: string | null
+          start_time: string
+          title: string
+        }
+        Insert: {
+          created_at?: string
+          description?: string | null
+          end_time: string
+          event_id?: string | null
+          id?: string
+          location?: string | null
+          max_capacity?: number | null
+          speaker?: string | null
+          start_time: string
+          title: string
+        }
+        Update: {
+          created_at?: string
+          description?: string | null
+          end_time?: string
+          event_id?: string | null
+          id?: string
+          location?: string | null
+          max_capacity?: number | null
+          speaker?: string | null
+          start_time?: string
+          title?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "sessions_event_id_fkey"
+            columns: ["event_id"]
+            isOneToOne: false
+            referencedRelation: "events"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      sponsors: {
+        Row: {
+          booth_visits: number | null
+          created_at: string
+          description: string | null
+          event_id: string | null
+          id: string
+          impressions: number | null
+          logo_url: string | null
+          sponsor_id: string | null
+          tier: string | null
+        }
+        Insert: {
+          booth_visits?: number | null
+          created_at?: string
+          description?: string | null
+          event_id?: string | null
+          id?: string
+          impressions?: number | null
+          logo_url?: string | null
+          sponsor_id?: string | null
+          tier?: string | null
+        }
+        Update: {
+          booth_visits?: number | null
+          created_at?: string
+          description?: string | null
+          event_id?: string | null
+          id?: string
+          impressions?: number | null
+          logo_url?: string | null
+          sponsor_id?: string | null
+          tier?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "sponsors_event_id_fkey"
+            columns: ["event_id"]
+            isOneToOne: false
+            referencedRelation: "events"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "sponsors_sponsor_id_fkey"
+            columns: ["sponsor_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      tasks: {
+        Row: {
+          created_at: string
+          description: string | null
+          due_date: string | null
+          event_id: string | null
+          id: string
+          status: string | null
+          title: string
+          updated_at: string
+          vendor_id: string | null
+        }
+        Insert: {
+          created_at?: string
+          description?: string | null
+          due_date?: string | null
+          event_id?: string | null
+          id?: string
+          status?: string | null
+          title: string
+          updated_at?: string
+          vendor_id?: string | null
+        }
+        Update: {
+          created_at?: string
+          description?: string | null
+          due_date?: string | null
+          event_id?: string | null
+          id?: string
+          status?: string | null
+          title?: string
+          updated_at?: string
+          vendor_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "tasks_event_id_fkey"
+            columns: ["event_id"]
+            isOneToOne: false
+            referencedRelation: "events"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "tasks_vendor_id_fkey"
+            columns: ["vendor_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
     }
     Views: {
       [_ in never]: never
@@ -23,7 +299,7 @@ export type Database = {
       [_ in never]: never
     }
     Enums: {
-      [_ in never]: never
+      app_role: "organizer" | "attendee" | "vendor" | "sponsor"
     }
     CompositeTypes: {
       [_ in never]: never
@@ -150,6 +426,8 @@ export type CompositeTypes<
 
 export const Constants = {
   public: {
-    Enums: {},
+    Enums: {
+      app_role: ["organizer", "attendee", "vendor", "sponsor"],
+    },
   },
 } as const
