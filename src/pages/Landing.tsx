@@ -74,8 +74,11 @@ export default function Landing() {
                 { label: "Active Users", value: "50K+", icon: Users },
                 { label: "Success Rate", value: "99%", icon: TrendingUp },
               ].map((stat, index) => (
-                <div key={stat.label} className="glass-card text-center animate-float" style={{ animationDelay: `${index * 0.5}s` }}>
-                  <stat.icon className="w-8 h-8 text-primary mx-auto mb-2" />
+                <div 
+                  key={stat.label} 
+                  className="glass-card text-center transform transition-all duration-300 hover:scale-105 hover:shadow-lg"
+                >
+                  <stat.icon className="w-8 h-8 text-primary mx-auto mb-2 transition-colors duration-300 group-hover:text-accent" />
                   <div className="text-2xl font-bold text-gradient-primary">{stat.value}</div>
                   <div className="text-sm text-muted-foreground">{stat.label}</div>
                 </div>
