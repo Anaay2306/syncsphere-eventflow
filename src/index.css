@@ -8,26 +8,33 @@ All colors MUST be HSL.
 
 @layer base {
   :root {
-    --background: 222 47% 11%;
+    /* Base Colors - Dark Navy/Black Theme */
+    --background: 220 27% 8%;
     --foreground: 210 40% 98%;
 
-    --card: 224 71% 14%;
+    /* Card & Surface Colors - Enhanced Glassmorphism */
+    --card: 220 27% 12%;
     --card-foreground: 210 40% 98%;
+    --glass: 220 27% 15% / 0.8;
+    --glass-border: 220 27% 25% / 0.3;
 
-    --popover: 224 71% 14%;
+    --popover: 220 27% 12%;
     --popover-foreground: 210 40% 98%;
 
-    --primary: 263 70% 50%;
+    /* Primary - Cyan (#06b6d4) */
+    --primary: 188 94% 43%;
     --primary-foreground: 210 40% 98%;
-    --primary-glow: 271 91% 65%;
+    --primary-glow: 188 94% 60%;
 
-    --secondary: 215 20% 65%;
+    /* Secondary - Deep Blue/Violet */
+    --secondary: 250 50% 30%;
     --secondary-foreground: 210 40% 98%;
 
-    --muted: 223 47% 15%;
+    --muted: 220 27% 15%;
     --muted-foreground: 215 20% 65%;
 
-    --accent: 189 94% 43%;
+    /* Accent - Enhanced Cyan */
+    --accent: 188 94% 43%;
     --accent-foreground: 210 40% 98%;
 
     --success: 142 76% 36%;
@@ -36,23 +43,67 @@ All colors MUST be HSL.
     --destructive: 0 84% 60%;
     --destructive-foreground: 210 40% 98%;
 
-    --border: 223 47% 20%;
-    --input: 223 47% 20%;
-    --ring: 263 70% 50%;
+    --border: 220 27% 20%;
+    --input: 220 27% 18%;
+    --ring: 188 94% 43%;
 
     --radius: 0.75rem;
 
-    /* Gradients */
-    --gradient-primary: linear-gradient(135deg, hsl(263 70% 50%), hsl(218 91% 60%));
-    --gradient-accent: linear-gradient(135deg, hsl(189 94% 43%), hsl(263 70% 50%));
+    /* Enhanced Gradients */
+    --gradient-primary: linear-gradient(135deg, hsl(188 94% 43%), hsl(250 50% 30%));
+    --gradient-accent: linear-gradient(135deg, hsl(188 94% 43%), hsl(263 70% 50%));
     --gradient-success: linear-gradient(135deg, hsl(142 76% 36%), hsl(158 64% 52%));
+    --gradient-hero: linear-gradient(135deg, hsl(220 27% 8%), hsl(250 50% 15%));
+    --gradient-card: linear-gradient(135deg, hsl(220 27% 12% / 0.8), hsl(250 50% 15% / 0.6));
 
-    /* Shadows */
-    --shadow-glow: 0 0 40px hsl(271 91% 65% / 0.4);
-    --shadow-card: 0 10px 30px -10px hsl(222 47% 11% / 0.3);
+    /* Enhanced Shadows & Glows */
+    --shadow-glow: 0 0 40px hsl(188 94% 60% / 0.4);
+    --shadow-card: 0 10px 30px -10px hsl(220 27% 8% / 0.5);
+    --shadow-glass: 0 8px 32px hsl(220 27% 8% / 0.3);
+    --shadow-hover: 0 20px 40px -10px hsl(188 94% 43% / 0.3);
 
-    /* Animations */
+    /* Glassmorphism Effects */
+    --blur-sm: blur(8px);
+    --blur-md: blur(16px);
+    --blur-lg: blur(24px);
+
+    /* Enhanced Animations */
     --transition-smooth: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    --transition-bounce: all 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+    --transition-spring: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+
+    /* Spacing Scale */
+    --space-xs: 0.5rem;
+    --space-sm: 1rem;
+    --space-md: 1.5rem;
+    --space-lg: 2rem;
+    --space-xl: 3rem;
+    --space-2xl: 4rem;
+  }
+
+  .light {
+    --background: 0 0% 100%;
+    --foreground: 222.2 84% 4.9%;
+    --card: 0 0% 100%;
+    --card-foreground: 222.2 84% 4.9%;
+    --glass: 0 0% 100% / 0.8;
+    --glass-border: 0 0% 80% / 0.3;
+    --popover: 0 0% 100%;
+    --popover-foreground: 222.2 84% 4.9%;
+    --primary: 188 94% 43%;
+    --primary-foreground: 210 40% 98%;
+    --secondary: 210 40% 96%;
+    --secondary-foreground: 222.2 84% 4.9%;
+    --muted: 210 40% 96%;
+    --muted-foreground: 215.4 16.3% 46.9%;
+    --accent: 210 40% 96%;
+    --accent-foreground: 222.2 84% 4.9%;
+    --destructive: 0 84.2% 60.2%;
+    --destructive-foreground: 210 40% 98%;
+    --border: 214.3 31.8% 91.4%;
+    --input: 214.3 31.8% 91.4%;
+    --ring: 188 94% 43%;
+    --shadow-glass: 0 8px 32px hsl(0 0% 0% / 0.1);
   }
 }
 
@@ -63,5 +114,96 @@ All colors MUST be HSL.
 
   body {
     @apply bg-background text-foreground;
+    background-image: 
+      radial-gradient(circle at 20% 80%, hsl(188 94% 43% / 0.1) 0%, transparent 50%),
+      radial-gradient(circle at 80% 20%, hsl(250 50% 30% / 0.1) 0%, transparent 50%);
   }
+}
+
+@layer components {
+  /* Glassmorphism Components */
+  .glass {
+    background: hsl(var(--glass));
+    backdrop-filter: blur(16px);
+    border: 1px solid hsl(var(--glass-border));
+    box-shadow: var(--shadow-glass);
+  }
+
+  .glass-card {
+    @apply glass rounded-xl p-6 transition-all duration-300;
+  }
+
+  .glass-card-hover {
+    @apply glass-card hover:border-primary/30 hover:scale-[1.02];
+    box-shadow: var(--shadow-glass);
+    transition: all 0.3s ease;
+  }
+
+  .glass-card-hover:hover {
+    box-shadow: var(--shadow-hover);
+  }
+
+  .glass-navbar {
+    @apply glass border-b backdrop-blur-lg;
+    border-bottom: 1px solid hsl(var(--glass-border));
+  }
+
+  /* Gradient Backgrounds */
+  .gradient-primary {
+    background: var(--gradient-primary);
+  }
+
+  .gradient-accent {
+    background: var(--gradient-accent);
+  }
+
+  .gradient-hero {
+    background: var(--gradient-hero);
+  }
+
+  .gradient-card {
+    background: var(--gradient-card);
+  }
+
+  /* Animated Elements */
+  .animate-float {
+    animation: float 6s ease-in-out infinite;
+  }
+
+  .animate-glow {
+    animation: glow 2s ease-in-out infinite alternate;
+  }
+
+  .animate-pulse-slow {
+    animation: pulse 4s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+  }
+
+  /* Text Gradients */
+  .text-gradient-primary {
+    @apply bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent;
+  }
+
+  .text-gradient-accent {
+    @apply bg-gradient-to-r from-accent to-primary bg-clip-text text-transparent;
+  }
+}
+
+@layer utilities {
+  /* Custom Animations */
+  @keyframes float {
+    0%, 100% { transform: translateY(0px); }
+    50% { transform: translateY(-20px); }
+  }
+
+  @keyframes glow {
+    0% { box-shadow: 0 0 20px hsl(188 94% 43% / 0.3); }
+    100% { box-shadow: 0 0 40px hsl(188 94% 43% / 0.6); }
+  }
+
+  /* Backdrop Blur Utilities */
+  .backdrop-blur-xs { backdrop-filter: blur(2px); }
+  .backdrop-blur-sm { backdrop-filter: blur(4px); }
+  .backdrop-blur-md { backdrop-filter: blur(8px); }
+  .backdrop-blur-lg { backdrop-filter: blur(16px); }
+  .backdrop-blur-xl { backdrop-filter: blur(24px); }
 }

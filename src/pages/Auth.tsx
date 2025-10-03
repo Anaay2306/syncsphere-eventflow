@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { GradientButton } from "@/components/ui/gradient-button";
@@ -19,12 +19,24 @@ export default function Auth() {
   const [fullName, setFullName] = useState("");
   const [role, setRole] = useState<"organizer" | "attendee" | "vendor" | "sponsor">("attendee");
 
+  // Check if user is already authenticated and redirect
+  useEffect(() => {
+    const checkAuth = async () => {
+      const { data: { session } } = await supabase.auth.getSession();
+      if (session) {
+        navigate("/dashboard");
+      }
+    };
+    
+    checkAuth();
+  }, [navigate]);
+
   const handleSignUp = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
 
     try {
-      const { error } = await supabase.auth.signUp({
+      const { data, error } = await supabase.auth.signUp({
         email,
         password,
         options: {
@@ -32,16 +44,25 @@ export default function Auth() {
             full_name: fullName,
             role: role,
           },
-          emailRedirectTo: `${window.location.origin}/`,
+          emailRedirectTo: `${window.location.origin}/dashboard`,
         },
       });
 
       if (error) throw error;
 
-      toast({
-        title: "Success!",
-        description: "Check your email to confirm your account.",
-      });
+      // If user is immediately confirmed (e.g., in development)
+      if (data.user && !data.user.email_confirmed_at) {
+        toast({
+          title: "Success!",
+          description: "Check your email to confirm your account.",
+        });
+      } else if (data.user && data.user.email_confirmed_at) {
+        toast({
+          title: "Welcome!",
+          description: "Account created successfully. Redirecting...",
+        });
+        navigate("/dashboard");
+      }
     } catch (error: any) {
       toast({
         title: "Error",
@@ -69,6 +90,11 @@ export default function Auth() {
         title: "Welcome back!",
         description: "Redirecting to your dashboard...",
       });
+
+      // Small delay to ensure auth state is updated before redirect
+      setTimeout(() => {
+        navigate("/dashboard");
+      }, 100);
     } catch (error: any) {
       toast({
         title: "Error",
