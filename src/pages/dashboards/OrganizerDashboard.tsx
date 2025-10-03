@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
+import { useNavigate } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { GlassCard } from "@/components/ui/glass-card";
 import { Button } from "@/components/ui/button";
@@ -88,6 +89,7 @@ interface Vendor {
 
 export default function OrganizerDashboard() {
   const { toast } = useToast();
+  const navigate = useNavigate();
   const [activeTab, setActiveTab] = useState('analytics');
   
   const [stats, setStats] = useState({
@@ -724,7 +726,17 @@ export default function OrganizerDashboard() {
                 >
                   <Button
                     variant={activeTab === tab.id ? 'default' : 'ghost'}
-                    onClick={() => setActiveTab(tab.id)}
+                    onClick={() => {
+                      if (tab.id === 'events') {
+                        navigate('/organizer/events');
+                      } else if (tab.id === 'analytics') {
+                        navigate('/organizer/analytics');
+                      } else if (tab.id === 'speakers') {
+                        navigate('/organizer/speakers');
+                      } else {
+                        setActiveTab(tab.id);
+                      }
+                    }}
                     size="sm"
                     className={`
                       relative transition-all duration-300 
