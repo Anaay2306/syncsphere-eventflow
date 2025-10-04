@@ -15,6 +15,10 @@ import Settings from "./pages/Settings";
 import ManageEvents from "./pages/organizer/ManageEvents";
 import Analytics from "./pages/organizer/Analytics";
 import Speakers from "./pages/organizer/Speakers";
+import VendorServices from "./pages/vendor/Services";
+import VendorPartnerships from "./pages/vendor/Partnerships";
+import SponsorSponsorships from "./pages/sponsor/Sponsorships";
+import SponsorAnalytics from "./pages/sponsor/Analytics";
 
 const queryClient = new QueryClient();
 
@@ -109,6 +113,38 @@ const App = () => (
             element={
               <ProtectedRoute>
                 <Speakers />
+              </ProtectedRoute>
+            } 
+          />
+          <Route 
+            path="/vendor/services" 
+            element={
+              <ProtectedRoute>
+                <VendorServices />
+              </ProtectedRoute>
+            } 
+          />
+          <Route 
+            path="/vendor/partnerships" 
+            element={
+              <ProtectedRoute>
+                <VendorPartnerships />
+              </ProtectedRoute>
+            } 
+          />
+          <Route 
+            path="/sponsor/sponsorships" 
+            element={
+              <ProtectedRoute>
+                <SponsorSponsorships />
+              </ProtectedRoute>
+            } 
+          />
+          <Route 
+            path="/sponsor/analytics" 
+            element={
+              <ProtectedRoute>
+                <SponsorAnalytics />
               </ProtectedRoute>
             } 
           />

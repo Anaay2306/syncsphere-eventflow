@@ -18,7 +18,9 @@ import {
   LogOut,
   Settings,
   BarChart3,
-  TrendingUp
+  TrendingUp,
+  Mic,
+  Handshake
 } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
@@ -31,22 +33,36 @@ export default function Navbar({ userRole }: NavbarProps) {
   const [isOpen, setIsOpen] = useState(false);
   const [isDark, setIsDark] = useState(true);
   const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [currentUserRole, setCurrentUserRole] = useState<string | null>(null);
   const navigate = useNavigate();
   const location = useLocation();
   const { toast } = useToast();
 
   useEffect(() => {
-    // Check authentication status
+    // Check authentication status and get user role
     supabase.auth.getSession().then(({ data: { session } }) => {
       setIsAuthenticated(!!session);
+      if (session?.user) {
+        // Get user role from user metadata or database
+        const role = session.user.user_metadata?.role || userRole || 'attendee';
+        setCurrentUserRole(role);
+      } else {
+        setCurrentUserRole(null);
+      }
     });
 
     const { data: { subscription } } = supabase.auth.onAuthStateChange((event, session) => {
       setIsAuthenticated(!!session);
+      if (session?.user) {
+        const role = session.user.user_metadata?.role || userRole || 'attendee';
+        setCurrentUserRole(role);
+      } else {
+        setCurrentUserRole(null);
+      }
     });
 
     return () => subscription.unsubscribe();
-  }, []);
+  }, [userRole]);
 
   const handleSignOut = async () => {
     try {
@@ -70,53 +86,58 @@ export default function Navbar({ userRole }: NavbarProps) {
     document.documentElement.classList.toggle('light');
   };
 
-  const navItems = [
-    { 
-      label: 'Home', 
-      icon: Home, 
-      href: '/', 
-      show: true 
-    },
-    { 
-      label: 'Dashboard', 
-      icon: LayoutDashboard, 
-      href: '/dashboard', 
-      show: isAuthenticated 
-    },
-    { 
-      label: 'Events', 
-      icon: Calendar, 
-      href: '/events', 
-      show: isAuthenticated 
-    },
-    { 
-      label: 'Profile', 
-      icon: User, 
-      href: '/profile', 
-      show: isAuthenticated 
-    },
+  // Determine if we're on landing page or in app
+  const isLandingPage = location.pathname === '/';
+  const isAuthPage = location.pathname === '/auth';
+  
+  // Landing page navigation (public)
+  const landingNavItems = [
+    { label: 'Home', icon: Home, href: '/' },
+    { label: 'Features', icon: BarChart3, href: '#features' },
+    { label: 'About', icon: Users, href: '#about' },
+    { label: 'Contact', icon: User, href: '#contact' },
   ];
 
+  // Authenticated app navigation (common for all roles)
+  const appNavItems = [
+    { label: 'Dashboard', icon: LayoutDashboard, href: '/dashboard' },
+    { label: 'Events', icon: Calendar, href: '/events' },
+    { label: 'Profile', icon: User, href: '/profile' },
+  ];
+
+  // Role-specific navigation items
   const roleSpecificItems = {
     organizer: [
       { label: 'Manage Events', icon: Calendar, href: '/organizer/events' },
       { label: 'Analytics', icon: BarChart3, href: '/organizer/analytics' },
+      { label: 'Speakers', icon: Mic, href: '/organizer/speakers' },
     ],
     attendee: [
-      { label: 'My Events', icon: Calendar, href: '/attendee/events' },
+      { label: 'My Agenda', icon: Calendar, href: '/attendee/agenda' },
       { label: 'Networking', icon: Users, href: '/attendee/networking' },
     ],
     sponsor: [
       { label: 'Sponsorships', icon: Building2, href: '/sponsor/sponsorships' },
-      { label: 'ROI Tracking', icon: TrendingUp, href: '/sponsor/analytics' },
+      { label: 'ROI Analytics', icon: TrendingUp, href: '/sponsor/analytics' },
     ],
     vendor: [
       { label: 'Services', icon: Package, href: '/vendor/services' },
-      { label: 'Bookings', icon: Calendar, href: '/vendor/bookings' },
+      { label: 'Partnerships', icon: Handshake, href: '/vendor/partnerships' },
     ],
   };
 
-  const currentRoleItems = userRole ? roleSpecificItems[userRole] || [] : [];
+  // Get current navigation items based on context
+  const getNavigationItems = () => {
+    if (isLandingPage || isAuthPage || !isAuthenticated) {
+      return landingNavItems;
+    }
+    
+    // For authenticated users, show app navigation + role-specific items
+    const roleItems = currentUserRole ? roleSpecificItems[currentUserRole as keyof typeof roleSpecificItems] || [] : [];
+    return [...appNavItems, ...roleItems];
+  };
+
+  const navigationItems = getNavigationItems();
 
   return (
     <>
@@ -134,16 +155,24 @@ export default function Navbar({ userRole }: NavbarProps) {
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
               className="flex items-center gap-3 cursor-pointer"
-              onClick={() => navigate('/')}
+              onClick={() => {
+                if (isAuthenticated) {
+                  // Redirect to dashboard for authenticated users
+                  navigate('/dashboard');
+                } else {
+                  // Redirect to landing page for non-authenticated users
+                  navigate('/');
+                }
+              }}
             >
               <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-primary to-accent flex items-center justify-center">
                 <Calendar className="w-5 h-5 text-primary-foreground" />
               </div>
               <div className="flex flex-col">
                 <span className="text-lg font-bold text-gradient-primary">SyncSphere</span>
-                {userRole && (
+                {isAuthenticated && currentUserRole && (
                   <Badge variant="secondary" className="text-xs capitalize">
-                    {userRole}
+                    {currentUserRole}
                   </Badge>
                 )}
               </div>
@@ -151,27 +180,26 @@ export default function Navbar({ userRole }: NavbarProps) {
 
             {/* Desktop Navigation */}
             <div className="hidden md:flex items-center gap-6">
-              {navItems.filter(item => item.show).map((item) => (
+              {navigationItems.map((item) => (
                 <motion.div key={item.href} whileHover={{ y: -2 }}>
                   <Button
                     variant={location.pathname === item.href ? "default" : "ghost"}
                     size="sm"
-                    onClick={() => navigate(item.href)}
-                    className="flex items-center gap-2"
-                  >
-                    <item.icon className="w-4 h-4" />
-                    {item.label}
-                  </Button>
-                </motion.div>
-              ))}
-
-              {/* Role-specific items */}
-              {currentRoleItems.map((item) => (
-                <motion.div key={item.href} whileHover={{ y: -2 }}>
-                  <Button
-                    variant={location.pathname === item.href ? "default" : "ghost"}
-                    size="sm"
-                    onClick={() => navigate(item.href)}
+                    onClick={() => {
+                      if (item.href.startsWith('#')) {
+                        // Handle anchor links for landing page with offset for fixed navbar
+                        const element = document.querySelector(item.href) as HTMLElement;
+                        if (element) {
+                          const offsetTop = element.offsetTop - 80; // Account for navbar height
+                          window.scrollTo({
+                            top: offsetTop,
+                            behavior: 'smooth'
+                          });
+                        }
+                      } else {
+                        navigate(item.href);
+                      }
+                    }}
                     className="flex items-center gap-2"
                   >
                     <item.icon className="w-4 h-4" />
@@ -222,7 +250,7 @@ export default function Navbar({ userRole }: NavbarProps) {
                   <Button
                     variant="ghost"
                     size="sm"
-                    onClick={() => navigate('/profile')}
+                    onClick={() => navigate('/settings')}
                   >
                     <Settings className="w-4 h-4 mr-2" />
                     Settings
@@ -272,40 +300,30 @@ export default function Navbar({ userRole }: NavbarProps) {
             className="fixed top-16 left-0 right-0 z-40 md:hidden glass border-b border-glass-border"
           >
             <div className="px-4 py-6 space-y-4">
-              {navItems.filter(item => item.show).map((item) => (
+              {navigationItems.map((item, index) => (
                 <motion.div
                   key={item.href}
                   initial={{ x: -20, opacity: 0 }}
                   animate={{ x: 0, opacity: 1 }}
-                  transition={{ delay: 0.1 }}
+                  transition={{ delay: index * 0.05 }}
                 >
                   <Button
                     variant={location.pathname === item.href ? "default" : "ghost"}
                     className="w-full justify-start"
                     onClick={() => {
-                      navigate(item.href);
-                      setIsOpen(false);
-                    }}
-                  >
-                    <item.icon className="w-4 h-4 mr-3" />
-                    {item.label}
-                  </Button>
-                </motion.div>
-              ))}
-
-              {/* Role-specific mobile items */}
-              {currentRoleItems.map((item) => (
-                <motion.div
-                  key={item.href}
-                  initial={{ x: -20, opacity: 0 }}
-                  animate={{ x: 0, opacity: 1 }}
-                  transition={{ delay: 0.2 }}
-                >
-                  <Button
-                    variant={location.pathname === item.href ? "default" : "ghost"}
-                    className="w-full justify-start"
-                    onClick={() => {
-                      navigate(item.href);
+                      if (item.href.startsWith('#')) {
+                        // Handle anchor links for landing page with offset for fixed navbar
+                        const element = document.querySelector(item.href) as HTMLElement;
+                        if (element) {
+                          const offsetTop = element.offsetTop - 80; // Account for navbar height
+                          window.scrollTo({
+                            top: offsetTop,
+                            behavior: 'smooth'
+                          });
+                        }
+                      } else {
+                        navigate(item.href);
+                      }
                       setIsOpen(false);
                     }}
                   >
@@ -345,7 +363,7 @@ export default function Navbar({ userRole }: NavbarProps) {
                       variant="ghost"
                       className="w-full justify-start"
                       onClick={() => {
-                        navigate('/profile');
+                        navigate('/settings');
                         setIsOpen(false);
                       }}
                     >

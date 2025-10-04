@@ -966,11 +966,11 @@ export default function AttendeeDashboard() {
           
           <div className="flex items-center justify-between">
             <div>
-              <p className="font-medium">Live Captions</p>
-              <p className="text-sm text-muted-foreground">Real-time session captions</p>
+              <p className="font-medium">Screen Reader Support</p>
+              <p className="text-sm text-muted-foreground">Enable screen reader compatibility</p>
             </div>
             <Button variant="outline">
-              <Volume2 className="w-4 h-4 mr-2" />
+              <Accessibility className="w-4 h-4 mr-2" />
               Enable
             </Button>
           </div>
@@ -980,160 +980,134 @@ export default function AttendeeDashboard() {
   );
 
   const renderAnnouncementsView = () => (
-    <div className="space-y-4">
-      <h3 className="text-xl font-semibold flex items-center gap-2">
-        <Bell className="w-5 h-5" />
-        Live Announcements
-      </h3>
+    <div className="space-y-6">
+      <div className="flex justify-between items-center">
+        <h3 className="text-xl font-semibold">Live Announcements</h3>
+        <Badge variant="secondary">
+          <Bell className="w-3 h-3 mr-1" />
+          {announcements.length} New
+        </Badge>
+      </div>
       
-      {announcements.map((announcement) => {
-        const Icon = getAnnouncementIcon(announcement.type);
-        return (
-          <GlassCard key={announcement.id} className={`border-l-4 ${
-            announcement.type === 'warning' ? 'border-l-yellow-500' :
-            announcement.type === 'success' ? 'border-l-green-500' :
-            'border-l-blue-500'
-          }`}>
-            <div className="flex items-start gap-3">
-              <Icon className={`w-5 h-5 mt-1 ${
-                announcement.type === 'warning' ? 'text-yellow-500' :
-                announcement.type === 'success' ? 'text-green-500' :
-                'text-blue-500'
-              }`} />
-              <div className="flex-1">
-                <h4 className="font-semibold mb-1">{announcement.title}</h4>
-                <p className="text-muted-foreground mb-2">{announcement.message}</p>
-                <p className="text-xs text-muted-foreground">
-                  {formatDate(announcement.created_at)} at {formatTime(announcement.created_at)}
-                </p>
+      <div className="space-y-4">
+        {announcements.map((announcement) => {
+          const IconComponent = getAnnouncementIcon(announcement.type);
+          return (
+            <GlassCard key={announcement.id} className="p-4">
+              <div className="flex items-start gap-3">
+                <div className={`p-2 rounded-full ${
+                  announcement.type === 'warning' ? 'bg-yellow-500/20 text-yellow-500' :
+                  announcement.type === 'success' ? 'bg-green-500/20 text-green-500' :
+                  'bg-blue-500/20 text-blue-500'
+                }`}>
+                  <IconComponent className="w-4 h-4" />
+                </div>
+                <div className="flex-1">
+                  <h4 className="font-semibold text-sm">{announcement.title}</h4>
+                  <p className="text-sm text-muted-foreground mt-1">{announcement.message}</p>
+                  <p className="text-xs text-muted-foreground mt-2">
+                    {formatTime(announcement.created_at)}
+                  </p>
+                </div>
               </div>
-            </div>
-          </GlassCard>
-        );
-      })}
+            </GlassCard>
+          );
+        })}
+      </div>
     </div>
   );
 
   const renderGamificationView = () => (
     <div className="space-y-6">
+      <div className="flex justify-between items-center">
+        <h3 className="text-xl font-semibold">Gamification Hub</h3>
+        <Badge className="bg-gradient-to-r from-primary to-accent">
+          Level {gameStats.level}
+        </Badge>
+      </div>
+      
       <div className="grid md:grid-cols-2 gap-6">
         <GlassCard>
-          <h3 className="text-lg font-semibold mb-4 flex items-center gap-2">
-            <Trophy className="w-5 h-5 text-yellow-500" />
-            Your Progress
-          </h3>
-          
+          <h4 className="font-semibold mb-4">Your Progress</h4>
           <div className="space-y-4">
-            <div>
-              <div className="flex justify-between items-center mb-2">
-                <span className="text-sm font-medium">Level {gameStats.level}</span>
-                <span className="text-sm text-muted-foreground">{gameStats.points} pts</span>
-              </div>
-              <div className="w-full bg-muted rounded-full h-2">
-                <div 
-                  className="bg-gradient-to-r from-primary to-accent h-2 rounded-full transition-all duration-500"
-                  style={{ width: `${(gameStats.points % 500) / 5}%` }}
-                />
-              </div>
-              <p className="text-xs text-muted-foreground mt-1">
-                {500 - (gameStats.points % 500)} points to next level
-              </p>
+            <div className="flex justify-between items-center">
+              <span className="text-sm">Points</span>
+              <span className="font-bold text-primary">{gameStats.points}</span>
             </div>
-            
-            <div className="grid grid-cols-2 gap-4 text-center">
-              <div>
-                <p className="text-2xl font-bold text-primary">{gameStats.checkIns}</p>
-                <p className="text-xs text-muted-foreground">Check-ins</p>
-              </div>
-              <div>
-                <p className="text-2xl font-bold text-accent">{gameStats.feedbackSubmitted}</p>
-                <p className="text-xs text-muted-foreground">Feedback</p>
-              </div>
+            <div className="flex justify-between items-center">
+              <span className="text-sm">Rank</span>
+              <span className="font-bold">#{gameStats.rank}</span>
+            </div>
+            <div className="flex justify-between items-center">
+              <span className="text-sm">Check-ins</span>
+              <span className="font-bold">{gameStats.checkIns}</span>
             </div>
           </div>
         </GlassCard>
-        
+
         <GlassCard>
-          <h3 className="text-lg font-semibold mb-4 flex items-center gap-2">
-            <Award className="w-5 h-5 text-purple-500" />
-            Leaderboard
-          </h3>
-          
-          <div className="space-y-3">
-            <div className="flex items-center justify-between p-3 bg-gradient-to-r from-yellow-500/20 to-yellow-600/20 rounded-lg border border-yellow-500/30">
-              <div className="flex items-center gap-3">
-                <div className="w-8 h-8 bg-yellow-500 rounded-full flex items-center justify-center text-white font-bold text-sm">
-                  1
-                </div>
-                <span className="font-medium">Alex Chen</span>
+          <h4 className="font-semibold mb-4">Achievements</h4>
+          <div className="grid grid-cols-2 gap-2">
+            {gameStats.badges.map((badge, index) => (
+              <div key={index} className={`p-2 rounded-lg text-center text-xs ${getBadgeColor(badge)}`}>
+                <Award className="w-4 h-4 mx-auto mb-1 text-white" />
+                <span className="text-white font-medium">{badge}</span>
               </div>
-              <span className="font-bold text-yellow-600">2,450 pts</span>
-            </div>
-            
-            <div className="flex items-center justify-between p-2 bg-muted/50 rounded-lg">
-              <div className="flex items-center gap-3">
-                <div className="w-8 h-8 bg-primary rounded-full flex items-center justify-center text-white font-bold text-sm">
-                  {gameStats.rank}
-                </div>
-                <span className="font-medium">You</span>
-              </div>
-              <span className="font-bold text-primary">{gameStats.points} pts</span>
-            </div>
+            ))}
           </div>
         </GlassCard>
       </div>
-      
-      <GlassCard>
-        <h3 className="text-lg font-semibold mb-4 flex items-center gap-2">
-          <Star className="w-5 h-5 text-blue-500" />
-          Your Badges
-        </h3>
-        
-        <div className="flex flex-wrap gap-3">
-          {gameStats.badges.map((badge, index) => (
-            <div 
-              key={index}
-              className={`px-4 py-2 rounded-full text-white text-sm font-medium ${getBadgeColor(badge)}`}
-            >
-              {badge}
-            </div>
-          ))}
-        </div>
-      </GlassCard>
     </div>
   );
 
   const renderSupportView = () => (
     <div className="space-y-6">
-      <h3 className="text-xl font-semibold">Event Support</h3>
+      <div className="flex justify-between items-center">
+        <h3 className="text-xl font-semibold">Help & Support</h3>
+        <Button 
+          variant={sosActive ? "destructive" : "outline"}
+          onClick={handleSOS}
+          className="animate-pulse"
+        >
+          <AlertTriangle className="w-4 h-4 mr-2" />
+          {sosActive ? "SOS Active" : "Emergency SOS"}
+        </Button>
+      </div>
+      
       <div className="grid md:grid-cols-2 gap-6">
         <GlassCard>
-          <h4 className="font-semibold mb-4">Get Help</h4>
+          <h4 className="font-semibold mb-4">AI Assistant</h4>
           <div className="space-y-3">
-            <Button className="w-full justify-start">
-              <Bot className="w-4 h-4 mr-2" />
-              Chat with AI Assistant
-            </Button>
-            <Button variant="outline" className="w-full justify-start">
-              <MessageSquare className="w-4 h-4 mr-2" />
-              Contact Support
-            </Button>
-            <Button variant="outline" className="w-full justify-start" onClick={handleSOS}>
-              <AlertTriangle className="w-4 h-4 mr-2" />
-              Emergency SOS
-            </Button>
+            <div className="p-3 bg-muted/50 rounded-lg">
+              <div className="flex items-center gap-2 mb-2">
+                <Bot className="w-4 h-4 text-primary" />
+                <span className="text-sm font-medium">EventBot</span>
+              </div>
+              <p className="text-sm">How can I help you today? Ask me about sessions, speakers, or navigation!</p>
+            </div>
+            <div className="flex gap-2">
+              <Input placeholder="Ask me anything..." className="flex-1" />
+              <Button size="sm">
+                <Send className="w-4 h-4" />
+              </Button>
+            </div>
           </div>
         </GlassCard>
+
         <GlassCard>
-          <h4 className="font-semibold mb-4">Quick Links</h4>
+          <h4 className="font-semibold mb-4">Quick Help</h4>
           <div className="space-y-2">
-            <Button variant="outline" size="sm" className="w-full justify-start">
-              <FileText className="w-4 h-4 mr-2" />
-              Event Guide
-            </Button>
-            <Button variant="outline" size="sm" className="w-full justify-start">
+            <Button variant="outline" className="w-full justify-start">
               <Map className="w-4 h-4 mr-2" />
-              Venue Map
+              Event Map & Navigation
+            </Button>
+            <Button variant="outline" className="w-full justify-start">
+              <Headphones className="w-4 h-4 mr-2" />
+              Technical Support
+            </Button>
+            <Button variant="outline" className="w-full justify-start">
+              <MessageCircle className="w-4 h-4 mr-2" />
+              Contact Organizers
             </Button>
           </div>
         </GlassCard>
@@ -1147,77 +1121,66 @@ export default function AttendeeDashboard() {
       <div className="min-h-screen bg-gradient-to-br from-background via-background to-card/50">
         {/* Enhanced Background */}
         <div className="absolute inset-0 overflow-hidden pointer-events-none">
-          <div className="absolute top-0 right-0 w-96 h-96 bg-primary/10 rounded-full blur-[120px] animate-float" />
-          <div className="absolute bottom-0 left-0 w-96 h-96 bg-accent/10 rounded-full blur-[120px] animate-float" style={{ animationDelay: "3s" }} />
+          <div className="absolute top-0 left-0 w-96 h-96 bg-primary/10 rounded-full blur-[120px] animate-float" />
+          <div className="absolute bottom-0 right-0 w-96 h-96 bg-accent/10 rounded-full blur-[120px] animate-float" style={{ animationDelay: "2s" }} />
+          <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-primary/5 rounded-full blur-[150px] animate-pulse-slow" />
         </div>
 
-        <div className="relative z-10 space-y-8 p-6 max-w-7xl mx-auto">
-          {/* Enhanced Header */}
-          <motion.div 
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5 }}
-            className="flex justify-between items-start"
-          >
-            <div className="space-y-2">
-              <h1 className="text-4xl md:text-5xl font-bold">
-                <span className="text-gradient-primary">
-                  Attendee Portal
-                </span>
-              </h1>
-              <p className="text-xl text-muted-foreground">Your personalized event experience</p>
-              
-              {/* Welcome Badge */}
-              <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full glass border border-primary/20 mt-4">
-                <CheckCircle className="w-4 h-4 text-success" />
-                <span className="text-sm font-medium">Welcome back! Ready for an amazing event?</span>
+        <div className="relative z-10 p-6 pt-24">
+          <div className="max-w-7xl mx-auto space-y-8">
+            {/* Enhanced Header */}
+            <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-6">
+              <div className="space-y-2">
+                <div className="flex items-center gap-3">
+                  <h1 className="text-4xl md:text-5xl font-bold text-gradient-primary">
+                    Welcome Back!
+                  </h1>
+                  <Badge className="bg-gradient-to-r from-primary to-accent text-primary-foreground">
+                    Attendee
+                  </Badge>
+                </div>
+                <p className="text-xl text-muted-foreground">
+                  Ready to make the most of your event experience?
+                </p>
               </div>
-            </div>
-            
-            {/* Enhanced SOS Button */}
-            <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
+              
               <Button 
-                onClick={handleSOS}
-                disabled={sosActive}
+                variant={sosActive ? "destructive" : "outline"}
                 size="lg"
-                className={`${
-                  sosActive 
-                    ? 'bg-red-600 animate-pulse' 
-                    : 'bg-red-500 hover:bg-red-600 animate-glow'
-                } text-white shadow-lg`}
+                onClick={handleSOS}
+                className={`${sosActive ? 'animate-pulse' : ''} shadow-lg`}
               >
                 <AlertTriangle className="w-5 h-5 mr-2" />
-                {sosActive ? 'SOS Sent!' : 'Emergency SOS'}
+                {sosActive ? "SOS Active" : "Emergency SOS"}
               </Button>
-            </motion.div>
-          </motion.div>
+            </div>
 
-          {/* Enhanced Stats Cards */}
-          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
-            {statCards.map((stat, index) => (
-              <motion.div
-                key={index}
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.5, delay: index * 0.1 }}
-              >
-                <GlassCard
-                  hover
-                  gradient
-                  className="group cursor-pointer relative overflow-hidden"
+            {/* Enhanced Stats Cards */}
+            <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
+              {statCards.map((stat, index) => (
+                <motion.div
+                  key={index}
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.5, delay: index * 0.1 }}
                 >
-                  {/* Animated Background */}
-                  <div className="absolute inset-0 bg-gradient-to-br from-primary/5 to-accent/5 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
-                  
-                  <div className="relative z-10 flex items-center gap-4">
-                    <div className={`p-4 rounded-xl bg-gradient-to-br ${stat.color} shadow-lg group-hover:shadow-xl transition-shadow duration-300`}>
-                      <stat.icon className="w-7 h-7 text-white" />
+                  <GlassCard
+                    hover
+                    gradient
+                    className="group cursor-pointer relative overflow-hidden"
+                  >
+                    {/* Animated Background */}
+                    <div className="absolute inset-0 bg-gradient-to-br from-primary/5 to-accent/5 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+                    
+                    <div className="relative z-10 flex items-center gap-4">
+                      <div className={`p-4 rounded-xl bg-gradient-to-br ${stat.color} shadow-lg group-hover:shadow-xl transition-shadow duration-300`}>
+                        <stat.icon className="w-7 h-7 text-white" />
+                      </div>
+                      <div className="flex-1">
+                        <p className="text-sm text-muted-foreground font-medium">{stat.label}</p>
+                        <p className="text-3xl font-bold text-gradient-primary">{stat.value}</p>
+                      </div>
                     </div>
-                    <div className="flex-1">
-                      <p className="text-sm text-muted-foreground font-medium">{stat.label}</p>
-                      <p className="text-3xl font-bold text-gradient-primary">{stat.value}</p>
-                    </div>
-                  </div>
                 </GlassCard>
               </motion.div>
             ))}
@@ -1292,6 +1255,7 @@ export default function AttendeeDashboard() {
             </motion.div>
           </AnimatePresence>
         </div>
+      </div>
       </div>
     </>
   );

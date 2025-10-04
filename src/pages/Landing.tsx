@@ -109,7 +109,7 @@ export default function Landing() {
         </section>
 
         {/* Enhanced Features Section */}
-        <section className="relative z-10 py-32 px-4 bg-gradient-to-b from-transparent to-background/50">
+        <section id="features" className="relative z-10 py-32 px-4 bg-gradient-to-b from-transparent to-background/50">
           <div className="max-w-7xl mx-auto">
             {/* Section Header */}
             <div className="text-center mb-20 space-y-6">
@@ -185,6 +185,152 @@ export default function Landing() {
                   </div>
                 </div>
               ))}
+            </div>
+          </div>
+        </section>
+
+        {/* About Section */}
+        <section id="about" className="relative z-10 py-32 px-4 bg-gradient-to-b from-background/50 to-transparent">
+          <div className="max-w-6xl mx-auto">
+            <div className="text-center mb-20 space-y-6">
+              <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full glass border border-primary/30">
+                <Users className="w-4 h-4 text-primary" />
+                <span className="text-sm font-medium text-primary">About SyncSphere</span>
+              </div>
+              <h2 className="text-5xl md:text-6xl font-bold">
+                <span className="text-gradient-primary">
+                  Revolutionizing Event Management
+                </span>
+              </h2>
+              <p className="text-xl text-muted-foreground max-w-4xl mx-auto leading-relaxed">
+                SyncSphere EventFlow is the next-generation event management platform designed to bring together 
+                organizers, attendees, sponsors, and vendors in one seamless ecosystem.
+              </p>
+            </div>
+
+            <div className="grid md:grid-cols-2 gap-12 items-center">
+              <div className="space-y-8">
+                <div className="space-y-6">
+                  <h3 className="text-3xl font-bold text-gradient-primary">Our Mission</h3>
+                  <p className="text-lg text-muted-foreground leading-relaxed">
+                    To transform how events are created, managed, and experienced by providing cutting-edge 
+                    technology that connects people and creates unforgettable moments.
+                  </p>
+                </div>
+                
+                <div className="space-y-4">
+                  {[
+                    "AI-powered event optimization",
+                    "Real-time collaboration tools",
+                    "Multi-role dashboard system",
+                    "Advanced analytics & insights"
+                  ].map((item, index) => (
+                    <div key={index} className="flex items-center gap-3">
+                      <CheckCircle2 className="w-5 h-5 text-primary flex-shrink-0" />
+                      <span className="text-muted-foreground">{item}</span>
+                    </div>
+                  ))}
+                </div>
+              </div>
+
+              <GlassCard hover gradient className="p-8">
+                <div className="space-y-6">
+                  <div className="text-center">
+                    <div className="w-20 h-20 mx-auto mb-4 rounded-full bg-gradient-to-br from-primary to-accent flex items-center justify-center">
+                      <Sparkles className="w-10 h-10 text-primary-foreground" />
+                    </div>
+                    <h4 className="text-2xl font-bold text-gradient-primary">Trusted by Thousands</h4>
+                  </div>
+                  
+                  <div className="grid grid-cols-2 gap-4 text-center">
+                    <div>
+                      <div className="text-3xl font-bold text-gradient-primary">500+</div>
+                      <div className="text-sm text-muted-foreground">Organizations</div>
+                    </div>
+                    <div>
+                      <div className="text-3xl font-bold text-gradient-primary">50K+</div>
+                      <div className="text-sm text-muted-foreground">Events</div>
+                    </div>
+                    <div>
+                      <div className="text-3xl font-bold text-gradient-primary">1M+</div>
+                      <div className="text-sm text-muted-foreground">Participants</div>
+                    </div>
+                    <div>
+                      <div className="text-3xl font-bold text-gradient-primary">99.9%</div>
+                      <div className="text-sm text-muted-foreground">Satisfaction</div>
+                    </div>
+                  </div>
+                </div>
+              </GlassCard>
+            </div>
+          </div>
+        </section>
+
+        {/* Contact Section */}
+        <section id="contact" className="relative z-10 py-32 px-4 bg-gradient-to-b from-transparent to-background/50">
+          <div className="max-w-4xl mx-auto">
+            <div className="text-center mb-20 space-y-6">
+              <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full glass border border-accent/30">
+                <Calendar className="w-4 h-4 text-accent" />
+                <span className="text-sm font-medium text-accent">Get In Touch</span>
+              </div>
+              <h2 className="text-5xl md:text-6xl font-bold">
+                <span className="text-gradient-primary">
+                  Ready to Get Started?
+                </span>
+              </h2>
+              <p className="text-xl text-muted-foreground max-w-3xl mx-auto leading-relaxed">
+                Have questions about SyncSphere? Want to see a demo? Our team is here to help you 
+                create amazing events.
+              </p>
+            </div>
+
+            <div className="grid md:grid-cols-3 gap-8 mb-12">
+              {[
+                {
+                  icon: Users,
+                  title: "Sales Team",
+                  description: "Get a personalized demo",
+                  contact: "sales@syncsphere.com"
+                },
+                {
+                  icon: Zap,
+                  title: "Support Team",
+                  description: "Technical assistance",
+                  contact: "support@syncsphere.com"
+                },
+                {
+                  icon: TrendingUp,
+                  title: "Partnership",
+                  description: "Business partnerships",
+                  contact: "partners@syncsphere.com"
+                }
+              ].map((contact, index) => (
+                <GlassCard key={index} hover className="text-center p-6">
+                  <div className="w-16 h-16 mx-auto mb-4 rounded-full bg-gradient-to-br from-primary to-accent flex items-center justify-center">
+                    <contact.icon className="w-8 h-8 text-primary-foreground" />
+                  </div>
+                  <h3 className="text-xl font-bold text-gradient-primary mb-2">{contact.title}</h3>
+                  <p className="text-muted-foreground mb-4">{contact.description}</p>
+                  <a 
+                    href={`mailto:${contact.contact}`}
+                    className="text-primary hover:text-accent transition-colors font-medium"
+                  >
+                    {contact.contact}
+                  </a>
+                </GlassCard>
+              ))}
+            </div>
+
+            <div className="text-center">
+              <GradientButton 
+                size="lg" 
+                onClick={() => navigate("/auth")} 
+                className="text-lg px-8 py-4 animate-glow"
+              >
+                Start Your Free Trial
+                <Sparkles className="w-5 h-5 ml-2" />
+              </GradientButton>
             </div>
           </div>
         </section>

@@ -600,43 +600,678 @@ export default function OrganizerDashboard() {
 
   const renderVendorsView = () => (
     <div className="space-y-6">
-      <h3 className="text-xl font-semibold">Vendors & Sponsors</h3>
-      <p>Vendor management functionality here...</p>
+      <div className="flex justify-between items-center">
+        <h3 className="text-xl font-semibold">Vendors & Sponsors Management</h3>
+        <Button className="bg-gradient-to-r from-primary to-accent">
+          <Plus className="w-4 h-4 mr-2" />
+          Add Vendor
+        </Button>
+      </div>
+
+      <div className="grid md:grid-cols-3 gap-6">
+        {[
+          { tier: 'Platinum', count: 3, revenue: '$45,000', color: 'from-slate-400 to-slate-600' },
+          { tier: 'Gold', count: 5, revenue: '$25,000', color: 'from-yellow-400 to-yellow-600' },
+          { tier: 'Silver', count: 8, revenue: '$12,000', color: 'from-gray-300 to-gray-500' }
+        ].map((tier, index) => (
+          <GlassCard key={index} hover gradient>
+            <div className="space-y-3">
+              <div className={`inline-flex px-3 py-1 rounded-full bg-gradient-to-r ${tier.color} text-white text-sm font-semibold`}>
+                {tier.tier} Tier
+              </div>
+              <div className="space-y-2">
+                <div className="flex justify-between">
+                  <span className="text-muted-foreground">Vendors</span>
+                  <span className="font-bold">{tier.count}</span>
+                </div>
+                <div className="flex justify-between">
+                  <span className="text-muted-foreground">Revenue</span>
+                  <span className="font-bold text-green-500">{tier.revenue}</span>
+                </div>
+              </div>
+            </div>
+          </GlassCard>
+        ))}
+      </div>
+
+      <GlassCard>
+        <h4 className="font-semibold mb-4">Active Vendors & Sponsors</h4>
+        <div className="space-y-3">
+          {[
+            { name: 'TechCorp Solutions', company: 'Technology', booth: 'A-12', tier: 'Platinum', traffic: 450 },
+            { name: 'Global Innovations', company: 'Innovation', booth: 'B-08', tier: 'Gold', traffic: 320 },
+            { name: 'Digital Dynamics', company: 'Digital Services', booth: 'C-15', tier: 'Silver', traffic: 180 }
+          ].map((vendor, index) => (
+            <div key={index} className="flex items-center justify-between p-4 bg-muted/30 rounded-lg hover:bg-muted/50 transition-colors">
+              <div className="flex items-center gap-4">
+                <div className="w-12 h-12 rounded-full bg-gradient-to-br from-primary to-accent flex items-center justify-center">
+                  <Briefcase className="w-6 h-6 text-white" />
+                </div>
+                <div>
+                  <p className="font-semibold">{vendor.name}</p>
+                  <p className="text-sm text-muted-foreground">{vendor.company} • Booth {vendor.booth}</p>
+                </div>
+              </div>
+              <div className="flex items-center gap-4">
+                <div className="text-right">
+                  <p className="text-sm font-medium">{vendor.tier}</p>
+                  <p className="text-xs text-muted-foreground">{vendor.traffic} visitors</p>
+                </div>
+                <Button variant="outline" size="sm">
+                  <Eye className="w-4 h-4 mr-1" />
+                  View
+                </Button>
+              </div>
+            </div>
+          ))}
+        </div>
+      </GlassCard>
     </div>
   );
 
   const renderCommunicationsView = () => (
     <div className="space-y-6">
-      <h3 className="text-xl font-semibold">Communications</h3>
-      <p>Communications functionality here...</p>
+      <div className="flex justify-between items-center">
+        <h3 className="text-xl font-semibold">Communications Center</h3>
+        <Button className="bg-gradient-to-r from-primary to-accent">
+          <Send className="w-4 h-4 mr-2" />
+          Send Announcement
+        </Button>
+      </div>
+
+      <div className="grid md:grid-cols-3 gap-6">
+        {[
+          { label: 'Email Campaigns', value: '12 Active', icon: Mail, color: 'from-blue-500 to-blue-600' },
+          { label: 'SMS Notifications', value: '1,247 Sent', icon: Smartphone, color: 'from-green-500 to-green-600' },
+          { label: 'Push Alerts', value: '3,450 Delivered', icon: Bell, color: 'from-purple-500 to-purple-600' }
+        ].map((stat, index) => (
+          <GlassCard key={index} hover gradient>
+            <div className="flex items-center gap-4">
+              <div className={`p-3 rounded-xl bg-gradient-to-br ${stat.color}`}>
+                <stat.icon className="w-6 h-6 text-white" />
+              </div>
+              <div>
+                <p className="text-sm text-muted-foreground">{stat.label}</p>
+                <p className="text-xl font-bold text-gradient-primary">{stat.value}</p>
+              </div>
+            </div>
+          </GlassCard>
+        ))}
+      </div>
+
+      <div className="grid md:grid-cols-2 gap-6">
+        <GlassCard>
+          <h4 className="font-semibold mb-4 flex items-center gap-2">
+            <Megaphone className="w-5 h-5 text-primary" />
+            Recent Announcements
+          </h4>
+          <div className="space-y-3">
+            {[
+              { title: 'Event Schedule Updated', time: '2 hours ago', type: 'info' },
+              { title: 'New Speaker Added', time: '5 hours ago', type: 'success' },
+              { title: 'Venue Change Alert', time: '1 day ago', type: 'warning' }
+            ].map((announcement, index) => (
+              <div key={index} className="p-3 bg-muted/30 rounded-lg">
+                <div className="flex justify-between items-start">
+                  <div>
+                    <p className="font-medium">{announcement.title}</p>
+                    <p className="text-xs text-muted-foreground mt-1">{announcement.time}</p>
+                  </div>
+                  <Badge variant={announcement.type === 'warning' ? 'destructive' : 'default'}>
+                    {announcement.type}
+                  </Badge>
+                </div>
+              </div>
+            ))}
+          </div>
+        </GlassCard>
+
+        <GlassCard>
+          <h4 className="font-semibold mb-4 flex items-center gap-2">
+            <MessageCircle className="w-5 h-5 text-primary" />
+            Quick Message
+          </h4>
+          <div className="space-y-4">
+            <div>
+              <label className="text-sm font-medium mb-2 block">Recipient Group</label>
+              <select className="w-full px-3 py-2 border rounded-lg bg-background">
+                <option>All Attendees</option>
+                <option>Speakers Only</option>
+                <option>Vendors & Sponsors</option>
+                <option>VIP Guests</option>
+              </select>
+            </div>
+            <div>
+              <label className="text-sm font-medium mb-2 block">Message</label>
+              <Textarea placeholder="Type your message here..." rows={4} />
+            </div>
+            <Button className="w-full bg-gradient-to-r from-primary to-accent">
+              <Send className="w-4 h-4 mr-2" />
+              Send Message
+            </Button>
+          </div>
+        </GlassCard>
+      </div>
     </div>
   );
 
   const renderCollaborationView = () => (
     <div className="space-y-6">
-      <h3 className="text-xl font-semibold">Collaboration</h3>
-      <p>Collaboration functionality here...</p>
+      <div className="flex justify-between items-center">
+        <h3 className="text-xl font-semibold">Team Collaboration</h3>
+        <Button className="bg-gradient-to-r from-primary to-accent">
+          <UserCheck className="w-4 h-4 mr-2" />
+          Invite Team Member
+        </Button>
+      </div>
+
+      <div className="grid md:grid-cols-2 gap-6">
+        <GlassCard>
+          <h4 className="font-semibold mb-4 flex items-center gap-2">
+            <Users className="w-5 h-5 text-primary" />
+            Team Members
+          </h4>
+          <div className="space-y-3">
+            {[
+              { name: 'Sarah Johnson', role: 'Event Coordinator', status: 'online', tasks: 12 },
+              { name: 'Michael Chen', role: 'Technical Lead', status: 'online', tasks: 8 },
+              { name: 'Emma Davis', role: 'Marketing Manager', status: 'away', tasks: 15 },
+              { name: 'James Wilson', role: 'Logistics Manager', status: 'offline', tasks: 6 }
+            ].map((member, index) => (
+              <div key={index} className="flex items-center justify-between p-3 bg-muted/30 rounded-lg">
+                <div className="flex items-center gap-3">
+                  <div className="relative">
+                    <div className="w-10 h-10 rounded-full bg-gradient-to-br from-primary to-accent flex items-center justify-center">
+                      <span className="text-white font-semibold">{member.name.charAt(0)}</span>
+                    </div>
+                    <div className={`absolute bottom-0 right-0 w-3 h-3 rounded-full border-2 border-background ${
+                      member.status === 'online' ? 'bg-green-500' :
+                      member.status === 'away' ? 'bg-yellow-500' : 'bg-gray-400'
+                    }`} />
+                  </div>
+                  <div>
+                    <p className="font-medium">{member.name}</p>
+                    <p className="text-xs text-muted-foreground">{member.role}</p>
+                  </div>
+                </div>
+                <div className="text-right">
+                  <p className="text-sm font-semibold">{member.tasks} tasks</p>
+                  <p className="text-xs text-muted-foreground capitalize">{member.status}</p>
+                </div>
+              </div>
+            ))}
+          </div>
+        </GlassCard>
+
+        <GlassCard>
+          <h4 className="font-semibold mb-4 flex items-center gap-2">
+            <FileText className="w-5 h-5 text-primary" />
+            Shared Documents
+          </h4>
+          <div className="space-y-3">
+            {[
+              { name: 'Event Schedule.pdf', size: '2.4 MB', shared: '3 hours ago', type: 'pdf' },
+              { name: 'Vendor Contracts.docx', size: '1.8 MB', shared: '1 day ago', type: 'doc' },
+              { name: 'Budget Spreadsheet.xlsx', size: '890 KB', shared: '2 days ago', type: 'excel' }
+            ].map((doc, index) => (
+              <div key={index} className="flex items-center justify-between p-3 bg-muted/30 rounded-lg hover:bg-muted/50 transition-colors">
+                <div className="flex items-center gap-3">
+                  <div className="w-10 h-10 rounded-lg bg-gradient-to-br from-blue-500 to-blue-600 flex items-center justify-center">
+                    <FileText className="w-5 h-5 text-white" />
+                  </div>
+                  <div>
+                    <p className="font-medium text-sm">{doc.name}</p>
+                    <p className="text-xs text-muted-foreground">{doc.size} • {doc.shared}</p>
+                  </div>
+                </div>
+                <div className="flex gap-2">
+                  <Button variant="ghost" size="sm">
+                    <Download className="w-4 h-4" />
+                  </Button>
+                  <Button variant="ghost" size="sm">
+                    <Share2 className="w-4 h-4" />
+                  </Button>
+                </div>
+              </div>
+            ))}
+          </div>
+          <Button variant="outline" className="w-full mt-4">
+            <Upload className="w-4 h-4 mr-2" />
+            Upload Document
+          </Button>
+        </GlassCard>
+      </div>
+
+      <GlassCard>
+        <h4 className="font-semibold mb-4 flex items-center gap-2">
+          <MessageSquare className="w-5 h-5 text-primary" />
+          Team Chat
+        </h4>
+        <div className="space-y-3 max-h-64 overflow-y-auto">
+          {[
+            { user: 'Sarah', message: 'Updated the event schedule', time: '10:30 AM' },
+            { user: 'Michael', message: 'Audio system check completed', time: '11:15 AM' },
+            { user: 'Emma', message: 'Social media posts scheduled', time: '12:00 PM' }
+          ].map((chat, index) => (
+            <div key={index} className="flex gap-3">
+              <div className="w-8 h-8 rounded-full bg-gradient-to-br from-primary to-accent flex items-center justify-center flex-shrink-0">
+                <span className="text-white text-xs font-semibold">{chat.user.charAt(0)}</span>
+              </div>
+              <div className="flex-1">
+                <div className="flex items-center gap-2">
+                  <span className="font-medium text-sm">{chat.user}</span>
+                  <span className="text-xs text-muted-foreground">{chat.time}</span>
+                </div>
+                <p className="text-sm text-muted-foreground mt-1">{chat.message}</p>
+              </div>
+            </div>
+          ))}
+        </div>
+        <div className="flex gap-2 mt-4">
+          <Input placeholder="Type a message..." className="flex-1" />
+          <Button size="sm" className="bg-gradient-to-r from-primary to-accent">
+            <Send className="w-4 h-4" />
+          </Button>
+        </div>
+      </GlassCard>
     </div>
   );
 
   const renderReportsView = () => (
     <div className="space-y-6">
-      <h3 className="text-xl font-semibold">Reports</h3>
-      <p>Reports functionality here...</p>
+      <div className="flex justify-between items-center">
+        <h3 className="text-xl font-semibold">Reports & Analytics</h3>
+        <Button className="bg-gradient-to-r from-primary to-accent">
+          <Download className="w-4 h-4 mr-2" />
+          Export All Reports
+        </Button>
+      </div>
+
+      <div className="grid md:grid-cols-4 gap-6">
+        {[
+          { label: 'Total Revenue', value: '$125,000', change: '+12%', icon: DollarSign, color: 'from-green-500 to-green-600' },
+          { label: 'Attendance Rate', value: '87%', change: '+5%', icon: Users, color: 'from-blue-500 to-blue-600' },
+          { label: 'Engagement Score', value: '92/100', change: '+8%', icon: Activity, color: 'from-purple-500 to-purple-600' },
+          { label: 'Satisfaction', value: '4.8/5', change: '+0.3', icon: Star, color: 'from-yellow-500 to-yellow-600' }
+        ].map((metric, index) => (
+          <GlassCard key={index} hover gradient>
+            <div className="space-y-3">
+              <div className={`w-12 h-12 rounded-xl bg-gradient-to-br ${metric.color} flex items-center justify-center`}>
+                <metric.icon className="w-6 h-6 text-white" />
+              </div>
+              <div>
+                <p className="text-sm text-muted-foreground">{metric.label}</p>
+                <p className="text-2xl font-bold text-gradient-primary">{metric.value}</p>
+                <p className="text-xs text-green-500 font-medium">{metric.change} vs last event</p>
+              </div>
+            </div>
+          </GlassCard>
+        ))}
+      </div>
+
+      <div className="grid md:grid-cols-2 gap-6">
+        <GlassCard>
+          <h4 className="font-semibold mb-4 flex items-center gap-2">
+            <FileSpreadsheet className="w-5 h-5 text-primary" />
+            Available Reports
+          </h4>
+          <div className="space-y-3">
+            {[
+              { name: 'Attendance Report', date: 'Last updated: Today', status: 'ready' },
+              { name: 'Revenue Analysis', date: 'Last updated: Yesterday', status: 'ready' },
+              { name: 'Engagement Metrics', date: 'Last updated: 2 days ago', status: 'ready' },
+              { name: 'Sponsor ROI Report', date: 'Last updated: 3 days ago', status: 'ready' }
+            ].map((report, index) => (
+              <div key={index} className="flex items-center justify-between p-3 bg-muted/30 rounded-lg hover:bg-muted/50 transition-colors">
+                <div className="flex items-center gap-3">
+                  <div className="w-10 h-10 rounded-lg bg-gradient-to-br from-primary to-accent flex items-center justify-center">
+                    <FileSpreadsheet className="w-5 h-5 text-white" />
+                  </div>
+                  <div>
+                    <p className="font-medium text-sm">{report.name}</p>
+                    <p className="text-xs text-muted-foreground">{report.date}</p>
+                  </div>
+                </div>
+                <div className="flex gap-2">
+                  <Button variant="outline" size="sm">
+                    <Eye className="w-4 h-4 mr-1" />
+                    View
+                  </Button>
+                  <Button variant="outline" size="sm">
+                    <Download className="w-4 h-4" />
+                  </Button>
+                </div>
+              </div>
+            ))}
+          </div>
+        </GlassCard>
+
+        <GlassCard>
+          <h4 className="font-semibold mb-4 flex items-center gap-2">
+            <TrendingUp className="w-5 h-5 text-primary" />
+            Performance Trends
+          </h4>
+          <div className="space-y-4">
+            {[
+              { metric: 'Registration Growth', value: '+23%', trend: 'up' },
+              { metric: 'Session Attendance', value: '+15%', trend: 'up' },
+              { metric: 'Sponsor Engagement', value: '+31%', trend: 'up' },
+              { metric: 'App Downloads', value: '+42%', trend: 'up' }
+            ].map((trend, index) => (
+              <div key={index} className="flex items-center justify-between p-3 bg-muted/30 rounded-lg">
+                <span className="text-sm font-medium">{trend.metric}</span>
+                <div className="flex items-center gap-2">
+                  <span className="text-green-500 font-bold">{trend.value}</span>
+                  <TrendingUp className="w-4 h-4 text-green-500" />
+                </div>
+              </div>
+            ))}
+          </div>
+        </GlassCard>
+      </div>
+
+      <GlassCard>
+        <h4 className="font-semibold mb-4">Custom Report Generator</h4>
+        <div className="grid md:grid-cols-3 gap-4">
+          <div>
+            <label className="text-sm font-medium mb-2 block">Report Type</label>
+            <select className="w-full px-3 py-2 border rounded-lg bg-background">
+              <option>Attendance Report</option>
+              <option>Revenue Analysis</option>
+              <option>Engagement Metrics</option>
+              <option>Custom Report</option>
+            </select>
+          </div>
+          <div>
+            <label className="text-sm font-medium mb-2 block">Date Range</label>
+            <select className="w-full px-3 py-2 border rounded-lg bg-background">
+              <option>Last 7 Days</option>
+              <option>Last 30 Days</option>
+              <option>Last Quarter</option>
+              <option>Custom Range</option>
+            </select>
+          </div>
+          <div>
+            <label className="text-sm font-medium mb-2 block">Format</label>
+            <select className="w-full px-3 py-2 border rounded-lg bg-background">
+              <option>PDF</option>
+              <option>Excel</option>
+              <option>CSV</option>
+            </select>
+          </div>
+        </div>
+        <Button className="w-full mt-4 bg-gradient-to-r from-primary to-accent">
+          <FileSpreadsheet className="w-4 h-4 mr-2" />
+          Generate Report
+        </Button>
+      </GlassCard>
     </div>
   );
 
   const renderIntegrationsView = () => (
     <div className="space-y-6">
-      <h3 className="text-xl font-semibold">Integrations</h3>
-      <p>Integrations functionality here...</p>
+      <div className="flex justify-between items-center">
+        <h3 className="text-xl font-semibold">Integrations & API</h3>
+        <Button className="bg-gradient-to-r from-primary to-accent">
+          <Plus className="w-4 h-4 mr-2" />
+          Add Integration
+        </Button>
+      </div>
+
+      <div className="grid md:grid-cols-3 gap-6">
+        {[
+          { name: 'Zoom', status: 'Connected', icon: Video, color: 'from-blue-500 to-blue-600' },
+          { name: 'Slack', status: 'Connected', icon: MessageSquare, color: 'from-purple-500 to-purple-600' },
+          { name: 'Stripe', status: 'Connected', icon: DollarSign, color: 'from-green-500 to-green-600' }
+        ].map((integration, index) => (
+          <GlassCard key={index} hover gradient>
+            <div className="flex items-center justify-between">
+              <div className="flex items-center gap-3">
+                <div className={`w-12 h-12 rounded-xl bg-gradient-to-br ${integration.color} flex items-center justify-center`}>
+                  <integration.icon className="w-6 h-6 text-white" />
+                </div>
+                <div>
+                  <p className="font-semibold">{integration.name}</p>
+                  <p className="text-xs text-green-500">{integration.status}</p>
+                </div>
+              </div>
+              <Button variant="outline" size="sm">
+                <Settings className="w-4 h-4" />
+              </Button>
+            </div>
+          </GlassCard>
+        ))}
+      </div>
+
+      <div className="grid md:grid-cols-2 gap-6">
+        <GlassCard>
+          <h4 className="font-semibold mb-4 flex items-center gap-2">
+            <Zap className="w-5 h-5 text-primary" />
+            Available Integrations
+          </h4>
+          <div className="space-y-3">
+            {[
+              { name: 'Google Calendar', description: 'Sync event schedules', status: 'available' },
+              { name: 'Mailchimp', description: 'Email marketing automation', status: 'available' },
+              { name: 'Salesforce', description: 'CRM integration', status: 'available' },
+              { name: 'HubSpot', description: 'Marketing & sales platform', status: 'available' }
+            ].map((app, index) => (
+              <div key={index} className="flex items-center justify-between p-3 bg-muted/30 rounded-lg hover:bg-muted/50 transition-colors">
+                <div className="flex items-center gap-3">
+                  <div className="w-10 h-10 rounded-lg bg-gradient-to-br from-primary to-accent flex items-center justify-center">
+                    <Globe className="w-5 h-5 text-white" />
+                  </div>
+                  <div>
+                    <p className="font-medium text-sm">{app.name}</p>
+                    <p className="text-xs text-muted-foreground">{app.description}</p>
+                  </div>
+                </div>
+                <Button variant="outline" size="sm">
+                  Connect
+                </Button>
+              </div>
+            ))}
+          </div>
+        </GlassCard>
+
+        <GlassCard>
+          <h4 className="font-semibold mb-4 flex items-center gap-2">
+            <Key className="w-5 h-5 text-primary" />
+            API Keys
+          </h4>
+          <div className="space-y-4">
+            <div className="p-4 bg-muted/30 rounded-lg">
+              <div className="flex justify-between items-center mb-2">
+                <span className="text-sm font-medium">Production API Key</span>
+                <Badge variant="default">Active</Badge>
+              </div>
+              <div className="flex items-center gap-2">
+                <code className="flex-1 px-3 py-2 bg-background rounded text-xs font-mono">
+                  sk_live_••••••••••••••••1234
+                </code>
+                <Button variant="outline" size="sm">
+                  <Copy className="w-4 h-4" />
+                </Button>
+              </div>
+            </div>
+            <div className="p-4 bg-muted/30 rounded-lg">
+              <div className="flex justify-between items-center mb-2">
+                <span className="text-sm font-medium">Development API Key</span>
+                <Badge variant="secondary">Active</Badge>
+              </div>
+              <div className="flex items-center gap-2">
+                <code className="flex-1 px-3 py-2 bg-background rounded text-xs font-mono">
+                  sk_test_••••••••••••••••5678
+                </code>
+                <Button variant="outline" size="sm">
+                  <Copy className="w-4 h-4" />
+                </Button>
+              </div>
+            </div>
+            <Button variant="outline" className="w-full">
+              <Plus className="w-4 h-4 mr-2" />
+              Generate New Key
+            </Button>
+          </div>
+        </GlassCard>
+      </div>
+
+      <GlassCard>
+        <h4 className="font-semibold mb-4 flex items-center gap-2">
+          <Database className="w-5 h-5 text-primary" />
+          Webhooks
+        </h4>
+        <div className="space-y-3">
+          {[
+            { url: 'https://api.example.com/webhook/registration', event: 'New Registration', status: 'active' },
+            { url: 'https://api.example.com/webhook/checkin', event: 'Check-in Event', status: 'active' },
+            { url: 'https://api.example.com/webhook/payment', event: 'Payment Received', status: 'active' }
+          ].map((webhook, index) => (
+            <div key={index} className="flex items-center justify-between p-3 bg-muted/30 rounded-lg">
+              <div className="flex-1">
+                <p className="font-medium text-sm">{webhook.event}</p>
+                <code className="text-xs text-muted-foreground">{webhook.url}</code>
+              </div>
+              <div className="flex items-center gap-2">
+                <Badge variant="default" className="text-xs">Active</Badge>
+                <Button variant="ghost" size="sm">
+                  <Settings className="w-4 h-4" />
+                </Button>
+              </div>
+            </div>
+          ))}
+        </div>
+        <Button variant="outline" className="w-full mt-4">
+          <Plus className="w-4 h-4 mr-2" />
+          Add Webhook
+        </Button>
+      </GlassCard>
     </div>
   );
 
   const renderSecurityView = () => (
     <div className="space-y-6">
-      <h3 className="text-xl font-semibold">Security</h3>
-      <p>Security functionality here...</p>
+      <div className="flex justify-between items-center">
+        <h3 className="text-xl font-semibold">Security & Permissions</h3>
+        <Button className="bg-gradient-to-r from-primary to-accent">
+          <Shield className="w-4 h-4 mr-2" />
+          Security Audit
+        </Button>
+      </div>
+
+      <div className="grid md:grid-cols-3 gap-6">
+        {[
+          { label: 'Active Sessions', value: '24', icon: Users, color: 'from-blue-500 to-blue-600' },
+          { label: 'Failed Logins', value: '3', icon: AlertTriangle, color: 'from-red-500 to-red-600' },
+          { label: 'API Requests', value: '1,247', icon: Activity, color: 'from-green-500 to-green-600' }
+        ].map((stat, index) => (
+          <GlassCard key={index} hover gradient>
+            <div className="flex items-center gap-4">
+              <div className={`p-3 rounded-xl bg-gradient-to-br ${stat.color}`}>
+                <stat.icon className="w-6 h-6 text-white" />
+              </div>
+              <div>
+                <p className="text-sm text-muted-foreground">{stat.label}</p>
+                <p className="text-2xl font-bold text-gradient-primary">{stat.value}</p>
+              </div>
+            </div>
+          </GlassCard>
+        ))}
+      </div>
+
+      <div className="grid md:grid-cols-2 gap-6">
+        <GlassCard>
+          <h4 className="font-semibold mb-4 flex items-center gap-2">
+            <Lock className="w-5 h-5 text-primary" />
+            Access Control
+          </h4>
+          <div className="space-y-3">
+            {[
+              { role: 'Admin', users: 3, permissions: 'Full Access', color: 'red' },
+              { role: 'Event Manager', users: 8, permissions: 'Event Management', color: 'blue' },
+              { role: 'Staff', users: 15, permissions: 'Limited Access', color: 'green' },
+              { role: 'Viewer', users: 25, permissions: 'Read Only', color: 'gray' }
+            ].map((role, index) => (
+              <div key={index} className="flex items-center justify-between p-3 bg-muted/30 rounded-lg">
+                <div className="flex items-center gap-3">
+                  <div className={`w-10 h-10 rounded-lg bg-${role.color}-500/20 flex items-center justify-center`}>
+                    <Shield className={`w-5 h-5 text-${role.color}-500`} />
+                  </div>
+                  <div>
+                    <p className="font-medium text-sm">{role.role}</p>
+                    <p className="text-xs text-muted-foreground">{role.permissions}</p>
+                  </div>
+                </div>
+                <div className="text-right">
+                  <p className="text-sm font-semibold">{role.users} users</p>
+                  <Button variant="ghost" size="sm" className="h-6 px-2 mt-1">
+                    <Edit className="w-3 h-3" />
+                  </Button>
+                </div>
+              </div>
+            ))}
+          </div>
+        </GlassCard>
+
+        <GlassCard>
+          <h4 className="font-semibold mb-4 flex items-center gap-2">
+            <Key className="w-5 h-5 text-primary" />
+            Security Settings
+          </h4>
+          <div className="space-y-4">
+            {[
+              { setting: 'Two-Factor Authentication', enabled: true },
+              { setting: 'Password Expiry (90 days)', enabled: true },
+              { setting: 'IP Whitelisting', enabled: false },
+              { setting: 'Session Timeout (30 min)', enabled: true }
+            ].map((setting, index) => (
+              <div key={index} className="flex items-center justify-between p-3 bg-muted/30 rounded-lg">
+                <span className="text-sm font-medium">{setting.setting}</span>
+                <Button 
+                  variant={setting.enabled ? "default" : "outline"} 
+                  size="sm"
+                  className={setting.enabled ? "bg-green-500 hover:bg-green-600" : ""}
+                >
+                  {setting.enabled ? <Lock className="w-4 h-4 mr-1" /> : <Unlock className="w-4 h-4 mr-1" />}
+                  {setting.enabled ? 'Enabled' : 'Disabled'}
+                </Button>
+              </div>
+            ))}
+          </div>
+        </GlassCard>
+      </div>
+
+      <GlassCard>
+        <h4 className="font-semibold mb-4 flex items-center gap-2">
+          <Activity className="w-5 h-5 text-primary" />
+          Recent Security Activity
+        </h4>
+        <div className="space-y-3">
+          {[
+            { action: 'Admin login from new device', user: 'admin@syncsphere.com', time: '2 hours ago', type: 'warning' },
+            { action: 'Password changed successfully', user: 'sarah@syncsphere.com', time: '5 hours ago', type: 'success' },
+            { action: 'Failed login attempt', user: 'unknown@example.com', time: '1 day ago', type: 'error' },
+            { action: 'API key regenerated', user: 'michael@syncsphere.com', time: '2 days ago', type: 'info' }
+          ].map((activity, index) => (
+            <div key={index} className="flex items-center justify-between p-3 bg-muted/30 rounded-lg">
+              <div className="flex items-center gap-3">
+                <div className={`w-2 h-2 rounded-full ${
+                  activity.type === 'error' ? 'bg-red-500' :
+                  activity.type === 'warning' ? 'bg-yellow-500' :
+                  activity.type === 'success' ? 'bg-green-500' : 'bg-blue-500'
+                }`} />
+                <div>
+                  <p className="font-medium text-sm">{activity.action}</p>
+                  <p className="text-xs text-muted-foreground">{activity.user} • {activity.time}</p>
+                </div>
+              </div>
+              <Button variant="ghost" size="sm">
+                <Eye className="w-4 h-4" />
+              </Button>
+            </div>
+          ))}
+        </div>
+      </GlassCard>
     </div>
   );
 
