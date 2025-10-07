@@ -146,12 +146,21 @@ interface Poll {
   totalVotes: number;
 }
 
-export default function AttendeeDashboard() {
+interface AttendeeDashboardProps {
+  initialTab?: string;
+}
+
+export default function AttendeeDashboard({ initialTab = 'agenda' }: AttendeeDashboardProps) {
   const { toast } = useToast();
-  const [activeTab, setActiveTab] = useState('agenda');
+  const [activeTab, setActiveTab] = useState(initialTab);
   const [qrCode, setQrCode] = useState('');
   const [showQR, setShowQR] = useState(false);
   const [sosActive, setSosActive] = useState(false);
+
+  // Update active tab when initialTab prop changes
+  useEffect(() => {
+    setActiveTab(initialTab);
+  }, [initialTab]);
   
   const [stats, setStats] = useState({
     registeredEvents: 0,
@@ -849,7 +858,7 @@ export default function AttendeeDashboard() {
                   placeholder="Type a message..."
                   value={newMessage}
                   onChange={(e) => setNewMessage(e.target.value)}
-                  size="sm"
+                  className="text-sm"
                 />
                 <Button size="sm">
                   <Send className="w-4 h-4" />

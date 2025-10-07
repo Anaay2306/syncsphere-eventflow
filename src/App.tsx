@@ -19,6 +19,7 @@ import VendorServices from "./pages/vendor/Services";
 import VendorPartnerships from "./pages/vendor/Partnerships";
 import SponsorSponsorships from "./pages/sponsor/Sponsorships";
 import SponsorAnalytics from "./pages/sponsor/Analytics";
+import AttendeeDashboard from "./pages/dashboards/AttendeeDashboard";
 
 const queryClient = new QueryClient();
 
@@ -145,6 +146,22 @@ const App = () => (
             element={
               <ProtectedRoute>
                 <SponsorAnalytics />
+              </ProtectedRoute>
+            } 
+          />
+          <Route 
+            path="/attendee/agenda" 
+            element={
+              <ProtectedRoute>
+                <AttendeeDashboard initialTab="agenda" />
+              </ProtectedRoute>
+            } 
+          />
+          <Route 
+            path="/attendee/networking" 
+            element={
+              <ProtectedRoute>
+                <AttendeeDashboard initialTab="networking" />
               </ProtectedRoute>
             } 
           />
